@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "460625215930",
+    "firebase_url": "https://yoreceto-40f61-default-rtdb.firebaseio.com",
+    "project_id": "yoreceto-40f61",
+    "storage_bucket": "yoreceto-40f61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460625215930:android:520643a16511cbd078dd83",
+        "android_client_info": {
+          "package_name": "com.yoreceto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460625215930-dvhse5p74fs9o4ctk3naco7t7k6empkv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yoreceto",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "460625215930-bjim1r0bg3jlj5rnq4100in38u2ef32g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKoC-DHJhG0ngQI4jvP4XtZmyalhCibL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460625215930-bjim1r0bg3jlj5rnq4100in38u2ef32g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
