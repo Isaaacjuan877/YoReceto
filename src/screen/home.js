@@ -47,7 +47,8 @@ const Home = () => {
 
   const [recipes, setRecipes] = useState([]);
   const [topRecipes, setTopRecipes] = useState([]);
-
+// utiliza el hook useEffect de React para realizar una consulta a una base de datos Firestore de Firebase.
+//consulta  a la collecion recetario y llama las 5 recetas con mas likes 
   useEffect(() => {
     const recipesRef = firestore().collection('recetario');
     const unsubscribe = recipesRef.orderBy('likes', 'desc').limit(5)
@@ -63,7 +64,7 @@ const Home = () => {
         setTopRecipes(recipes);
       }, error => console.log(error));
     
-    // return the unsubscribe function to stop listening to updates when the component unmounts
+    
     return () => unsubscribe();
   }, []);
   
@@ -74,6 +75,7 @@ const Home = () => {
   <Button title='base de datos' onPress={handleDB}/>
    
  } */ 
+ // redirige a la pantalla de receta con los datos que recibe el objeto recipe como parametro
  const handleCook = recipe => {
   navigation.navigate('Receta', { recipe });
 };
@@ -84,7 +86,7 @@ const Home = () => {
     <View style={styles.container}>
       
         <View style={styles.SubContainer}>
-          
+          {/* Seccion de categorias */}
           <View>
             <View style={styles.SecCat}>
               <Text style={styles.titleSecCat}>Categorias</Text>
@@ -106,7 +108,8 @@ const Home = () => {
          <View style={styles.topRec}>
                     
           {topRecipes.map((recipe, index) => (
-            
+            // dependiendo de la posicion en la que se encutre la receta con mas likes,
+            // se le asigna un icono numerico para determinar su posicion
             <View style={{ flexDirection: 'row', alignItems: 'center', padding:20}} key={recipe.id}>
                {(() => {
                   switch (index) {
@@ -125,7 +128,7 @@ const Home = () => {
                   }
                 })()}
               <View style={{ flex: 1 }}>
-              
+              {/* Datos de la receta */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5, width:'80%', marginLeft:10}}>
                 <Image source={{ uri: recipe.image }} style={{ width: 50, height: 50, marginRight: 10 }} />
                   <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 16 , flexWrap:'wrap' }}>{recipe.label}</Text>
@@ -140,6 +143,7 @@ const Home = () => {
                  
                   <Text style={{ color: 'black', marginLeft:10  }}>Grasa: {Math.round(recipe.totalNutrients.FAT.quantity)}g</Text>
                 </View>
+                {/*se llama la funcion handleCook y envia el objeto receipe como parametro  */}
                 <Button title="A cocinar" color="red" onPress={() => handleCook(recipe)} />
               </View>
             </View>

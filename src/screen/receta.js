@@ -211,6 +211,7 @@ const Receta = ({ route }) => {
       ToastAndroid.show('Inicie sesion', ToastAndroid.LONG);
     }
   };
+  // llamamo sel numero de liles que tiene la recta actual
   useEffect(() => {
     const encodedUrl = encodeURIComponent(recipe.uri);
     const unsubscribe = firestore()
@@ -223,7 +224,7 @@ const Receta = ({ route }) => {
 
     return () => unsubscribe();
   }, [recipe.uri]);
-  
+  // Se implementa la api de youtube para mostrar los videos de las recetas similares 
   const getRelatedVideos = async () => {
     const API_KEY = 'AIzaSyCr5vWvRtgxAabHIRkFOy5-7cSBTADZrvU';
     try {
@@ -245,6 +246,7 @@ const Receta = ({ route }) => {
   const togglePanelComent = () => {
     setShowPanelComent(!showPanelComent);
   };
+  //se hace el reporte de los comentarios y se agrega dicho comentario a la administarcion de comentarios
   const handleReportComment = async (commentId) => {
     const reportRef = firestore().collection('reportComments').doc(commentId);
     const reportDoc = await reportRef.get();

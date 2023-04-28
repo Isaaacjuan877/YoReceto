@@ -8,13 +8,16 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const Login = () => {
+  // declarar las variables de estado del componente user, correo(correo electrónico), clave(contraseña) y error
     const [user, setUser] = useState(null);
   const [correo, setCorreo] = useState('');
   const [clave, setClave] = useState('');
   const [error, setError] = useState('');
   
   const navigation = useNavigation();
-
+// se utiliza para observar cambios en el estado de autenticación del usuario. 
+//Llama auth().onAuthStateChangedcon una función de devolución de llamada que se ejecuta cuando cambia el estado de autenticación. 
+//Si un usuario está autenticado, obtiene su información de la base de datos de Firestore y la almacena en la uservariable de estado. 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (user) => {
       if (user) {
@@ -27,6 +30,9 @@ const Login = () => {
   
     return unsubscribe;
   }, []);
+  //Se llama auth().signInWithEmailAndPasswordpara intentar iniciar la sesión del usuario con el correo electrónico
+  // y la contraseña proporcionados. Si tiene éxito, muestra un mensaje de éxito y navega a la pantalla "Inicio" (Inicio). 
+  //Si hay un error, establece la errorvariable de estado en un mensaje basado en el código de error devuelto por Firebase.
   const handleLogin = () => {
     
         auth()
@@ -58,6 +64,7 @@ const Login = () => {
     
     <View style={styles.container}>
         <View style={styles.logoContainer}>
+          {/* Logos YoReceto */}
         <Image
           style={styles.logo}
           source={LogoRec}
@@ -69,6 +76,7 @@ const Login = () => {
 
         
       </View>
+      {/* Camps de texto para el inicio de sesion */}
       <TextInput
         style={styles.input}
         placeholder="Correo electrónico"
@@ -83,12 +91,14 @@ const Login = () => {
         onChangeText={text => setClave(text)}
         value={clave}
       />
+      {/* Mostar error referentes al inicio de sesion */}
         {error && (
             <View style={styles.alert}>
                 <Text style={styles.alertText}>{error}</Text>
             </View>
         )}
         <TouchableOpacity style={{backgroundColor:'white', width:290}}>
+          {/* Se llama la funcion handleLogin */}
             <Button style={styles.btnSesion} title="Iniciar sesión" onPress={handleLogin} />
         </TouchableOpacity>
     </View>

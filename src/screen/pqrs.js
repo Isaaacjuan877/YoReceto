@@ -18,7 +18,7 @@ const PQRS = () => {
     const handleDesPress = () => {
       setOpen(!open);
     };
-
+      // Checamos si hay o no hay sesioes activas
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
           if (user) {
@@ -128,6 +128,7 @@ const PQRS = () => {
     
       <View style={styles.menuCategorias}>
           {open && (
+            // dependiendo de que se presione se escoje el tipo de pqrs
             <View>
               <TouchableOpacity style={styles.categorias} onPress={() => handlePress('Peticiones')}>
                 <Text style={styles.categoriasText}>Peticiones</Text>

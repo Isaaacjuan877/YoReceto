@@ -7,14 +7,14 @@ import FotoProv from '../prov/fotoprov.png';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 const Perfil = () => {
-  
+  // declarar las variables de estado 
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
   const [admin, setAdmin] = useState(false);
   const [data, setData] = useState([]);
   const [dataRg, setDataRg] = useState([]);
   const [dataIng, setDataIng] = useState([]);
-  // Obtener lodatos del la sesion
+  // Obtener lodatos del la sesion, para saber si la sesion activa es admin
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (user) => {
       if (user) {
@@ -51,7 +51,7 @@ const Perfil = () => {
           console.error(error);
         }
       };
-      // recetas con mas likes
+      // recetas con mas likes analiticas 
       useEffect(() => {
         const recetasRef = firestore().collection('recetario').orderBy('likes', 'desc').limit(3);
     
@@ -63,7 +63,7 @@ const Perfil = () => {
         // El return de useEffect es una función que se ejecuta cuando el componente se desmonta
         return () => unsubscribe();
       }, []);
-
+       //crea un objeto que contiene la información necesaria para mostrar una gráfica. 
       const chartData = {
         labels: data.map((receta) => receta.label.slice(0, 15)),
         datasets: [
@@ -72,7 +72,9 @@ const Perfil = () => {
           },
         ],
       }; 
-      // recetas guardadas
+      // recetas guardadas, llama las recetas guardadas en la coleccion cuando tengan el mismo id de la coleccion de recetario
+      //se utiliza parauseEffect, se define la lógica para obtener los datos de las recetas guardadas 
+      // y se actualiza el estado de los datos de la gráfica para mostrarlos en la página.
       useEffect(() => {
         const recipeRef = firestore().collection('recetasGuardadas');
       
@@ -106,7 +108,7 @@ const Perfil = () => {
       
         return () => unsubscribe();
       }, []);
-      
+      //crea un objeto que contiene la información necesaria para mostrar una gráfica. 
       const chartDataRd = {
         labels: dataRg.map((item) => item.label.slice(0, 15)),
         datasets: [
@@ -151,7 +153,7 @@ const Perfil = () => {
     
       fetchData();
     }, []);
-    
+     //crea un objeto que contiene la información necesaria para mostrar una gráfica. 
     const chartDataIn = {
       labels: dataIng.map((item) => item.label),
       datasets: [
@@ -192,6 +194,7 @@ const Perfil = () => {
                  
                   
                   {data.length > 0 ? (
+                    // genear las graficas de acuerdo a la informacion obtenida de firebase
                     <View style={styles.rctLikes}>
                       <Text style={styles.titleAnaliticas} >Analiticas</Text>
                       <Text style={styles.tlAnaliticas}>Top 3 recetas con mas likes </Text>
@@ -228,6 +231,7 @@ const Perfil = () => {
                         <Text>Loading...</Text>
                       )}
                       {dataRg.length > 0 ? (
+                        // genear las graficas de acuerdo a la informacion obtenida de firebase
                 <View style={styles.rctLikes}>
                          <Text style={styles.tlAnaliticas}>Top 3 rcetas mas guardadas</Text>
                          
@@ -263,6 +267,7 @@ const Perfil = () => {
                         <Text>Loading...</Text>
                       )}
                       {dataIng.length > 0 ? (
+                        // genear las graficas de acuerdo a la informacion obtenida de firebase
                         <View style={styles.rctLikes}>
                          <Text style={styles.tlAnaliticas}>Top 3 ingredientes mas comunes en las recetas</Text>
                         
