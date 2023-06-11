@@ -83,7 +83,9 @@ const Chat = () => {
         }
       });
     };
-   
+    useEffect(() => {
+      handleRefresh(); // Llamamos a handleRefresh al cargar la pantalla para obtener los mensajes
+    }, []);
     const handleReport = async (messageId) => {
       const reportRef = firestore().collection('reports').doc(messageId);
       const reportDoc = await reportRef.get();
@@ -105,38 +107,41 @@ const Chat = () => {
   
     const renderItem = ({ item }) => {
       const user = auth().currentUser;
-      const isUser = item.userId === user?.uid;
+      const isUser = user && item.userId === user?.uid;
       const isReported = reportedMessages.includes(item.id);
+      
       return (
         <View style={[styles.message, isUser ? styles.userMessage : styles.otherMessage]}>
           {!isUser && <Image style={styles.userPhoto} source={FotoProv} />}
           <View style={[styles.messageContent, isUser ? styles.userMessageContent : styles.otherMessageContent]}>
             <View style={styles.nameContainer}>
-            {!isUser && (
-            <>
-              <Text style={styles.userName}>{item.userName}</Text>
-              {!isReported ? (
-                <Text onPress={() => handleReport(item.id)}  style={{ color:"black" }} > Reportar  <Icon name="flag" size={16} color="#000" /></Text> 
-              ) : (
-                <Text  onPress={() => handleReport(item.id)} style={{ color:"black" }} color="transparent" > Quitar reporte <Icon name="flag" size={16} color="red" /></Text>
+              {!isUser && (
+                <>
+                  <Text style={styles.userName}>{item.userName}</Text>
+                  { !isReported ? (
+                    <Text onPress={() => handleReport(item.id)} style={{ color: "black" }}> Reportar  <Icon name="flag" size={16} color="#000" /></Text>
+                  ) : (
+                   
+                      <Text onPress={() => handleReport(item.id)} style={{ color:"black" }}> Quitar reporte <Icon name="flag" size={16} color="red" /></Text>
+                    
+                  )}
+                </>
               )}
-            </>
-          )}
             </View>
             <Text style={styles.messageText}>{item.text}</Text>
-            
           </View>
-         {isUser && <Image style={styles.userPhoto} source={FotoProv} />}
-          
-         
+          {isUser && <Image style={styles.userPhoto} source={FotoProv} />}
         </View>
       );
+     
     };
     
     const renderInput = () => {
       const user = auth().currentUser;
       if (!user) {
+        
         return (
+          
           <View style={styles.inputContainer}>
             <Text style={styles.notLoggedInText}>Por favor, inicie sesión para enviar mensajes</Text>
           </View>
@@ -169,6 +174,7 @@ const Chat = () => {
             refreshing={refreshing} // Agregamos la prop refreshing y le pasamos el estado refreshing
             /> 
         {renderInput()}
+        
         </View>
     </SafeAreaView>
     );

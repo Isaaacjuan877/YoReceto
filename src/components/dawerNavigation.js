@@ -1,4 +1,4 @@
-import { StyleSheet, Text,View,Image,ScrollView } from 'react-native';
+import { StyleSheet, Text,View,Image,ScrollView, Linking} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import FotoProv from '../prov/fotoprov.png';
@@ -52,7 +52,7 @@ export  function DrawerNavigation() {
             const userDoc = await firestore().collection('Usuarios').doc(user.uid).get();
             setUser({ ...userDoc.data(), uid: user.uid });
           } else {
-            setUser(null); // aquí se cierra la sesión de la colección
+            setUser(null);
           }
         });
     
@@ -170,6 +170,13 @@ const Menu = ({navigation})=>{
       return unsubscribe;
     }, []);
     
+    const handleComposeEmail = () => {
+      const recipientEmail = 'isaacjuan877@gmail.com'; // Cambia por tu dirección de correo
+  
+      const emailUrl = `mailto:${recipientEmail}`;
+  
+      Linking.openURL(emailUrl);
+    };
     
     
   
@@ -179,16 +186,13 @@ const Menu = ({navigation})=>{
             style={styles.container}
             >
                 
-                <Text style={styles.title}>
-                    Menú
-                    
-                </Text>
+                
                 {user ? (
         <>
           <View style={styles.head}>
                 <View >
-                  <Text style={styles.name}>Hola! {user.nombre} {user.apellido}</Text>
-                  <Text style={{fontSize:17,color:'black'}}>Good morning</Text>
+                  <Text style={styles.name}>Hola! {user.nombre} </Text>
+                  <Text style={{fontSize:17,color:'black'}}>Bienvenido</Text>
                 </View>
                 <Image style={styles.avatar} source={{uri:'https://render.fineartamerica.com/images/images-profile-flow/400/images-medium-large-5/did-someone-say-mouse-don-spenner.jpg'}}/>
               </View>
@@ -245,6 +249,33 @@ const Menu = ({navigation})=>{
               onPress={() => navigation.navigate('AdmPqrs')}
             />
             <MenuBotones
+                  icon="fast-food"
+                  text="Recetario"
+                  onPress={() => navigation.navigate('Recetario')}
+                />
+                {/* <MenuBotones
+                  icon= 'pizza'
+                  text='Receta Diaria'
+                  onPress={()=>navigation.navigate('RecetaDiaria')}
+                /> */}
+
+                <MenuBotones
+                  icon="pizza"
+                  text="Receta Personalizada"
+                  onPress={() => navigation.navigate('Personalizada')}
+                />
+
+                <MenuBotones
+                  icon="bookmark"
+                  text="Guardados"
+                  onPress={() => navigation.navigate('Guardados')}
+                />
+                <MenuBotones
+                  icon= 'chatbubbles'
+                  text='Chat en linea'
+                  onPress={()=>navigation.navigate('Chat')}
+                />
+            <MenuBotones
               icon="person"
               text="Perfil"
               onPress={() => navigation.navigate('Perfil')}
@@ -282,7 +313,7 @@ const Menu = ({navigation})=>{
 
                 <MenuBotones
                   icon="pizza"
-                  text="Receta Perzonalizada"
+                  text="Receta Personalizada"
                   onPress={() => navigation.navigate('Personalizada')}
                 />
 
@@ -365,14 +396,17 @@ const Menu = ({navigation})=>{
                     Contactanos 
                     
                 </Text>
+                 
                 <View
                     style={styles.contacto}
                 >
+                 
                     <Icon style={styles.redes}
                         raised
                         name='logo-facebook'
                         type='ionicon'
                         color='red'
+                        
                     />
                     <Icon style={styles.redes}
                         raised
@@ -380,6 +414,16 @@ const Menu = ({navigation})=>{
                         type='ionicon'
                         color='red'
                     />
+                    
+                    
+                    
+                
+                </View>
+                <View
+                    style={styles.contacto}
+                >
+                 
+                    
                     <Icon style={styles.redes}
                         raised
                         name='logo-twitter'
@@ -391,10 +435,13 @@ const Menu = ({navigation})=>{
                         name='mail'
                         type='ionicon'
                         color='red'
+                        onPress={handleComposeEmail}
                     />
                     
                 
                 </View>
+                
+                
     </DrawerContentScrollView>
         </ScrollView>
     )
@@ -408,6 +455,7 @@ const styles= StyleSheet.create({
     title:{
         fontSize:20,
         fontWeight: 'bold',
+        color:'black'
     },
     App_header:{
         display:'flex',
@@ -449,17 +497,17 @@ const styles= StyleSheet.create({
         display:'flex',
         flexWrap:'nowrap',
         flexDirection:'row',
-        alignContent:'flex-start',
-        alignItems:'flex-start',
-        justifyContent: 'flex-start',
-        
-        height:45,
-        width:50,
-        margin: 5,
+        alignContent:'center',
+        alignItems:'center',
+        justifyContent: 'space-around',
+        // backgroundColor:'red',
+        height:'auto',
+        width:'100%',
+        margin: 15,
         
       },
       redes:{
-        width: 5
+        
       },
       head:{
         flexDirection:'row',

@@ -26,6 +26,7 @@ const Receta = ({ route }) => {
   const [relatedVideos, setRelatedVideos] = useState([]);
   const [showPanel, setShowPanel] = useState(false);
   const [showPanelComent, setShowPanelComent] = useState(false);
+  const [showPanelTN, setShowPanelTN] = useState(false);
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [reportedComments, setReportedComments] = useState([]);
@@ -226,7 +227,7 @@ const Receta = ({ route }) => {
   }, [recipe.uri]);
   // Se implementa la api de youtube para mostrar los videos de las recetas similares 
   const getRelatedVideos = async () => {
-    const API_KEY = 'AIzaSyCr5vWvRtgxAabHIRkFOy5-7cSBTADZrvU';
+    const API_KEY = 'AIzaSyC5rEp8T46I50LQsMbwiNTh4uq35k2fQ-o';
     try {
       const response = await axios.get(
         `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${recipe.label}&key=${API_KEY}&maxResults=5`
@@ -245,6 +246,9 @@ const Receta = ({ route }) => {
   };
   const togglePanelComent = () => {
     setShowPanelComent(!showPanelComent);
+  };
+  const togglePanelTN = () => {
+    setShowPanelTN(!showPanelTN);
   };
   //se hace el reporte de los comentarios y se agrega dicho comentario a la administarcion de comentarios
   const handleReportComment = async (commentId) => {
@@ -270,7 +274,7 @@ const Receta = ({ route }) => {
     
     const user = auth().currentUser;
     const isRec = item.recetaId === recipe.uri;
-    const isCurrentUser = item.userId === user.uid;
+    const isCurrentUser = item.userId === user?.uid;
     const isReported = reportedComments.includes(item.id);
 
     return (
@@ -368,9 +372,12 @@ const Receta = ({ route }) => {
               </TouchableOpacity>
               </View>
             </View>
+            <Button style={{with:'100%', marginBottom:10}} title="  Ver Tabla Nutricional de la receta   " color={'red'} onPress={togglePanelTN} />
             <Button style={{with:'100%'}} title="Videos relacionados con esta receta" color={'red'} onPress={togglePanel} />
+            
           <View style={styles.infoReceta}>
-          
+            
+            
             
             <Text style={styles.info}>Categoría: {recipe.category}</Text>
             <Text style={styles.info}>Tiempo de preparación: {recipe.totalTime} minutos</Text>
@@ -433,17 +440,181 @@ const Receta = ({ route }) => {
             </Modal>
 
         </ScrollView>
-                
+              <View>
+                <Modal visible={showPanelTN} animationType="slide">
+                  <View>
+                    <View style={{ backgroundColor: 'red' }}>
+                      <TouchableOpacity style={styles.btnback} onPress={togglePanelTN}>
+                        <View style={styles.iconBorder}>
+                          <Image style={styles.iconBack} source={arrowleft} />
+                        </View>
+                        <Text style={styles.btnbackText}> Cerrar </Text> 
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap:'wrap',padding:5 }}>
+                        
+                      
+                        <View style={styles.table}>
+                          {/* Encabezados de columna */}
+                          <View style={styles.row}>
+                            <Text style={styles.headerCell}>Tabla nutricional</Text>
+                          </View>
+                           
+                          
+
+                          {/* Filas */}
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Calorías: {Math.round(recipe.calories)}</Text>
+                            </View>
+                            
+                          </View>
+
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Carbohidratos</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.CHOCDF.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.CHOCDF.unit}</Text>
+                            </View>
+                          </View>
+
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Colesterol</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.CHOLE.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.CHOLE.unit}</Text>
+                            </View>
+                          </View>
+
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Grasas</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.FAT.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.FAT.unit}</Text>
+                            </View>
+                          </View>
+
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Grasas saturadas</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.FASAT.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.FASAT.unit}</Text>
+                            </View>
+                          </View>
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Grasas trans</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.FATRN.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.FATRN.unit}</Text>
+                            </View>
+                          </View>
+
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Fibra</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.FIBTG.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.FIBTG.unit}</Text>
+                            </View>
+                          </View>
+
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Proteina</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.PROCNT.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.PROCNT.unit}</Text>
+                            </View>
+                          </View>
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Azucar</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.SUGAR.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.SUGAR.unit}</Text>
+                            </View>
+                          </View>
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Sodio</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.NA.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.NA.unit}</Text>
+                            </View>
+                          </View>
+                          <View style={styles.row}>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>Magnesio</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{Math.round(recipe.totalNutrients.MG.quantity)}</Text>
+                            </View>
+                            <View style={styles.cell}>
+                              <Text style={styles.cellText}>{recipe.totalNutrients.MG.unit}</Text>
+                            </View>
+                          </View>
+                        </View>
+                        
+            </View>
+                  
+                </Modal>
+                </View>  
         <View>
       
       <Modal visible={showPanel} animationType="slide">
+        <View>
+          <View style={{ backgroundColor: 'red' }}>
+            <TouchableOpacity style={styles.btnback} onPress={togglePanel}>
+              <View style={styles.iconBorder}>
+                <Image style={styles.iconBack} source={arrowleft} />
+              </View>
+              <Text style={styles.btnbackText}> Cerrar </Text> 
+            </TouchableOpacity>
+          </View>
+
+        </View>
         
         <View style={{flex:1}}>
           <View style={{width:'100%'}}> 
           <Text style={{ fontSize: 18, marginBottom: 10 , color:'black'}}>Videos relacionados:</Text>
+               
                 <FlatList
                   data={relatedVideos}
-                  style={{ flexGrow: 1 }}
+                  style={{ marginBottom:50}}
                   renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => Linking.openURL(`https://www.youtube.com/watch?v=${item.id.videoId}`)}>
                       <View
@@ -456,6 +627,7 @@ const Receta = ({ route }) => {
                           borderRadius: 10,
                           padding: 10,
                           color:'black',
+                          
                           
                         }}
                       > 
@@ -470,8 +642,10 @@ const Receta = ({ route }) => {
                   )}
                   keyExtractor={(item) => item.id.videoId}
                 />
+               
+                
                 </View>
-          <Button title="Cerrar" color={'red'} onPress={togglePanel} />
+          
         </View>
       </Modal>
     </View>
@@ -693,6 +867,35 @@ const styles=StyleSheet.create({
       marginRight: 50,
       marginLeft: 10,
     },
+    table: {
+      borderWidth: 1,
+      borderColor: 'black',
+      marginBottom: 10,
+      width:'100%'
+    },
+    row: {
+      flexDirection: 'row',
+     
+      
+    },
+    headerCell: {
+      flex: 1,
+      backgroundColor: '#ccc',
+      padding: 10,
+      color:'black',
+      
+    },
+    cell: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: 'black',
+      padding: 10,
+    },
+    cellText: {
+      textAlign: 'center',
+      color:'black'
+    },
+
 
 })
 

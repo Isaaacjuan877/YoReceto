@@ -14,10 +14,10 @@ export default function Personalizada() {
   const searchRecipes = async () => {
     const includedIngredients = query.toLowerCase().split(',').map((ingredient) => ingredient.trim());
     
-    // Get recipes from Firestore collection "recetario"
+    // llamar las recetas de la colleccion "recetario" 
     const recipesCollection = firestore().collection('recetario');
     const snapshot = await recipesCollection.get();
-    
+    // filtro de recetas de acuerdo a los ingredientes ingresados
     const filteredRecipes = snapshot.docs
       .map((doc) => ({ id: doc.id, ...doc.data() }))
       .filter((recipe) => {
@@ -38,6 +38,7 @@ export default function Personalizada() {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
+      {/* campo donde se digitan los ingredientes */}
       <TextInput
         placeholderTextColor="grey"
         placeholder="Ingresa tus ingredientes separados por comas"
@@ -46,6 +47,7 @@ export default function Personalizada() {
         style={{ borderWidth: 1, padding: 10, marginBottom: 10, color: 'black' }}
       />
       <Button title="Buscar recetas" color={'red'} onPress={handleSearch} />
+      {/* Se agregan los resultados de la busqueda */}
       <FlatList
         data={recipes}
         keyExtractor={(item) => item.id}

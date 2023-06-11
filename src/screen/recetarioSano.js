@@ -28,13 +28,13 @@ const RecetarioSano = () => {
       };
   return (
     <View>
-      <View style={{ paddingBottom: 10  }}>
+      <View style={{ paddingBottom: 10 , marginLeft:10 }}>
           <FlatList
             data={recipes}
             keyExtractor={item => item.uri}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleCook(item)}>
-                <View style={{ flexDirection: 'row', marginVertical: 5 }}>
+                <View style={{ flexDirection: 'row', marginVertical: 5, width:'97%'}}>
                   <Image
                     source={{ uri: item.image }}
                     style={{ width: 100, height: 100, marginRight: 10 }}
